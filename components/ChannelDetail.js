@@ -4,12 +4,18 @@ import { connect } from "react-redux";
 import { fetchChannelDetail, sendMessage, setLoading } from "../redux/actions";
 import Messages from "./Messages";
 import SearchChannelBar from "./SearchChannelBar";
-import "../assets/css/main.css";
 import Loading from "./Loading";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
-class SendMessageForm extends Component {
+import { withNavigation } from "react-navigation";
+
+import { Container, Header, Thumbnail, Text, Icon } from "native-base";
+import { View } from "react-native";
+
+class ChannelDetail extends Component {
+
+
+
+
   state = {
     filteredMessages: [],
     searchIsUsed: false,
@@ -52,70 +58,76 @@ class SendMessageForm extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.channelID !== undefined) {
-      if (
-        this.props.match.params.channelID !== prevProps.match.params.channelID
-      ) {
+    const channelID = this.props.navigation.getParam("channelID");
+
+
+    if (channelID !== undefined) {
+      if (channelID !== prevProps.channelID) {
         this.props.changeLoading();
-        this.props.fetchChannelDetail(this.props.match.params.channelID);
+        this.props.fetchChannelDetail(channelID);
       } else {
         clearInterval(this.interval);
         this.interval = setInterval(() => {
-          this.props.fetchChannelDetail(this.props.match.params.channelID);
+          this.props.fetchChannelDetail(channelID);
         }, 1000);
       }
     }
+
+
+    // if (this.props.match.params.channelID !== undefined) {
+    //   if (
+    //     this.props.match.params.channelID !== prevProps.match.params.channelID
+    //   ) {
+    //     this.props.changeLoading();
+    //     this.props.fetchChannelDetail(this.props.match.params.channelID);
+    //   } else {
+    //     clearInterval(this.interval);
+    //     this.interval = setInterval(() => {
+    //       this.props.fetchChannelDetail(this.props.match.params.channelID);
+    //     }, 1000);
+    //   }
+    // }
+
+
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  changeHandler = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
 
-  submitHandler = event => {
-    event.preventDefault();
+  //added this for the native form format
+  handleChange = keyValue => {
+    this.setState(keyValue);
+  };
+  //new
+  handleSubmit = () => {
+    // alert("Check my code the states are empty");
+    const channelID = this.props.navigation.getParam("channelID");
+
     this.props.sendMessage(
-      this.props.match.params.channelID,
+      channelID,
       this.state,
       this.props.user,
       this.resetForm
     );
+
     this.setState({
       message: ""
     });
-    let text = document.messageForm.message;
-    text.value = "";
+
   };
+
 
   myView = () => {
     const channel = this.props.channel;
 
     if (!!channel) {
-      const ChannelIDfromURL = this.props.match.params.channelID;
-      console.log("ChannelIDfromURL", ChannelIDfromURL);
-
-      let findChannel = this.props.channels.find(
-        channel => channel.id === +ChannelIDfromURL
-      );
-
-      let background = "";
-      console.log("findChannel", findChannel);
-
-      if (findChannel) {
-        background = findChannel.image_url;
-        console.log("findChannel.image_url", findChannel.image_url);
-      }
-
-      // set the background of the channel to be the "image_url" of the channel
       if (this.state.searchIsUsed) {
         const resultedMessages = this.state.filteredMessages.map(message => (
           <Messages
             key={message.id}
             messages={message}
-            background={background}
           />
         ));
         return { resultedMessages };
@@ -127,18 +139,12 @@ class SendMessageForm extends Component {
           <Messages
             key={message.id}
             messages={message}
-            background={background}
           />
         ));
         return (
-          <div
-            id="bgIMG"
-            style={{
-              backgroundImage: `url(${background})`
-            }}
-          >
+          <View>
             {messages}
-          </div>
+          </View>
         );
       }
     }
@@ -146,34 +152,41 @@ class SendMessageForm extends Component {
 
   render() {
     if (this.props.loading) return <Loading />;
-    if (!this.props.user) return <Redirect to="/login" />;
+
+
+
+    const { message } = this.state.message;
 
     return (
       <>
-        <SearchChannelBar onChange={this.filterMessages} />
-        <div id="bubble" className=" ml-5 content col-10">
+        {/* <SearchChannelBar onChangeText={this.filterMessages} /> */}
+        <View>
           {this.myView()}
-
-          <div style={{ textAlign: "center" }} className="mt-5 p-2">
-            <form name="messageForm" onSubmit={this.submitHandler}>
-              <div className="row" id="scroller">
-                <div className="col-12">
-                  <input
+          <Container>
+            <Header />
+            <Content>
+              <Form>
+                <Item>
+                  <Input
                     name="message"
-                    value={this.state.message}
+                    value={message}
                     placeholder="Write your message..."
-                    onChange={this.changeHandler}
-                    className="input"
-                  ></input>
-                </div>
+                    onChangeText={message => this.handleChange({ message: message })} />
 
-                <button id="send" type="submit" value="Send">
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+                </Item>
+
+                <Button onPress={this.handleSubmit}>
+                  <Icon name="send-circle" type="MaterialCommunityIcons" />
+                </Button>
+
+              </Form>
+            </Content>
+          </Container>
+
+
+        </View>
+
+
       </>
     );
   }
@@ -200,7 +213,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SendMessageForm);
+export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(ChannelDetail));
