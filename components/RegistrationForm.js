@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
+
+// NativeBase Components
+import { Text, Button, Form, Input, Item, Content, Header } from "native-base";
+
 import * as actionCreators from "../redux/actions";
 import { connect } from "react-redux";
 
@@ -9,19 +12,23 @@ class RegistationForm extends Component {
     password: ""
   };
 
-  changeHandler = e => {
-    this.setState({ [e.target.name]: e.target.value });
+  // changeHandler = e => {
+  //   this.setState({ [e.target.name]: e.target.value });
+  // };
+
+  handleChange = keyValue => {
+    this.setState(keyValue);
   };
 
   componentWillUnmount() {
     if (this.props.errors.length) this.props.resetErrors();
   }
 
-  submitHandler = e => {
-    e.preventDefault();
+  // submitHandler = e => {
+  //   e.preventDefault();
 
-    this.props.signup(this.state, this.props.history);
-  };
+  //   this.props.signup(this.state, this.props.history);
+  // };
 
   handleUsernameError = () => {
     if (this.props.errors) {
@@ -31,74 +38,73 @@ class RegistationForm extends Component {
     }
   };
 
-  // handlePasswordError = () => {
-  //   if (this.props.errors) {
-  //     if (this.props.errors.password[0]) {
-  //       return this.props.errors.password[0]
-  //     }
-  //   }
-  // }
-
   render() {
     const type = this.props.match.url.substring(1);
     console.log(this.props.errors);
 
-    if (this.props.user) return <Redirect to="/" />;
-
+    if (this.props.user) {
+      this.props.navigation.navigate("TestScreen");
+    }
     const errors = this.props.errors;
 
+    handleChange = keyValue => {
+      this.setState(keyValue);
+    };
+
     return (
-      <div className="card col-6 mx-auto p-0 mt-5">
-        <div className="card-body">
-          <h5 className="card-title mb-4">Register an account</h5>
-          <form onSubmit={this.submitHandler}>
+      <Container>
+        <Header />
+        <Content>
+          <Form>
             {!!errors.length && (
-              <div className="alert alert-danger" role="alert">
+              <View className="alert alert-danger" role="alert">
                 {errors.map(error => (
-                  <p key={error}>{error}</p>
+                  <Text key={error}>{error}</Text>
                 ))}
-              </div>
+              </View>
             )}
-
-            <div className="form-group">
-              <input
-                className="form-control"
-                type="text"
-                placeholder="Username"
+            <Item>
+              <Input
                 name="username"
-                id="input"
-                onChange={this.changeHandler}
+                value={username}
+                placeholder="Username"
+                onChangeText={username =>
+                  this.handleChange({ username: username })
+                }
               />
-
-              {/* {this.props.errors ? this.props.errors.username[0] : ""} */}
-            </div>
-            <div className="form-group">
-              <input
-                className="form-control"
-                type="password"
+            </Item>
+            <Item last>
+              <Input
+                value={password}
                 placeholder="Password"
+                secureTextEntry
                 name="password"
-                id="input"
-                onChange={this.changeHandler}
+                onChangeText={password =>
+                  this.handleChange({ password: password })
+                }
               />
-
-              {/* {this.props.errors ? this.props.errors.password[0] : ""} */}
-              {/* {this.handlePasswordError()} */}
-            </div>
-            <input
-              id="registerbtn"
-              className="btn btn-primary btn-block"
-              type="submit"
-              value={type.replace(/^\w/, c => c.toUpperCase())}
-            />
-          </form>
-        </div>
-        <div className="card-footer">
-          <Link to="/login" className="btn btn-small btn-link">
-            Already have an account? Login
-          </Link>
-        </div>
-      </div>
+            </Item>
+            <Button
+              full
+              success
+              onPress={() =>
+                this.props.login(this.state, this.props.navigation)
+              }
+            >
+              <Text>Login</Text>
+            </Button>
+            <Button
+              full
+              warning
+              onPress={() =>
+                this.props.signup(this.state, this.props.navigation)
+              }
+            >
+              <Text>Register</Text>
+            </Button>
+          </Form>
+        </Content>
+      </Container>
     );
   }
 }
@@ -112,8 +118,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    signup: (userData, history) =>
-      dispatch(actionCreators.signup(userData, history)),
+    signup: (userData, navigation) =>
+      dispatch(actionCreators.signup(userData, navigation)),
+    login: (userData, navigation) =>
+      dispatch(actionCreators.login(userData, navigation)),
     resetErrors: () => dispatch(actionCreators.resetErrors())
   };
 };

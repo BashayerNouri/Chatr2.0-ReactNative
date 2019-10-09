@@ -1,28 +1,26 @@
 import { createStackNavigator } from "react-navigation-stack";
 
-import Login from "../Components/LoginForm"; //Login
-import RegistrationForm from "../Components/RegistrationForm"; //Register
-import Test from "../Components/Test"; //Register
+import LoginForm from "../components/LoginForm"; //Login
+import RegistrationForm from "../components/RegistrationForm"; //Register
+import Test from "../components/Test.js"; //Register
 
 const MyStackNav = createStackNavigator(
   {
-    LoginScreen: Login,
+    LoginScreen: LoginForm,
     RegistrationScreen: RegistrationForm,
     TestScreen: Test
   },
   {
     initialRouteName: "LoginScreen",
+
     defaultNavigationOptions: {
-      headerTintColor: "white",
       headerStyle: {
         backgroundColor: "rgb(20,90,100)"
-      }
-    },
-    headerTitleStyle: {
-      fontWeight: "bold"
-    },
-    cardStyle: {
-      backgroundColor: "rgb(20,90,100)"
+      },
+      headerTitleStyle: {
+        fontWeight: "bold"
+      },
+      headerTintColor: "white"
     }
   }
 );

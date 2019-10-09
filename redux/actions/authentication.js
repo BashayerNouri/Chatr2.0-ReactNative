@@ -35,17 +35,13 @@ export const login = (userData, navigation) => {
       dispatch(setCurrentUser(user.token));
       dispatch(resetErrors());
 
-      // history.replace("/");
+      navigation.replace("TestScreen");
     } catch (error) {
       console.log(error);
       dispatch({
         type: actionTypes.SET_ERRORS,
         payload: error.response.data
       });
-      // console.log("An error occurred.", error);
-      // dispatch(setErrors(error.response.data));
-      // console.error(error.response.data);
-      // //must use setErrors
     }
   };
 };
@@ -61,7 +57,7 @@ export const signup = (userData, navigation) => {
       dispatch(setCurrentUser(user.token));
       dispatch(resetErrors());
 
-      // history.replace("/");
+      navigation.replace("TestScreen");
     } catch (error) {
       //another possible solution for catching errors
       console.error(error.response.data);
