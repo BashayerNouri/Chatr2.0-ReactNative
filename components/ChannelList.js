@@ -3,47 +3,62 @@ import * as actionCreators from "../redux/actions";
 import { connect } from "react-redux";
 
 //NativeBase Components
-import { Text, Left, Body, Right, Button, ListItem, Icon } from "native-base";
+//NativeBase Components
+import {
+  Text,
+  Left,
+  Body,
+  Right,
+  Button,
+  ListItem,
+  Icon,
+  Header,
+  Title,
+  Container,
+  List,
+  Content,
+  Item,
+  Input
+} from "native-base";
 import { View } from "react-native";
+
 
 //Components
 import ChannelRow from "./ChannelRow";
+import Searchbar from "./Navigation/SearchBar";
 
 class ChannelList extends Component {
-  componentDidMount() {
-    //main();
-    this.props.fetchChannels();
-  }
+  // componentDidMount() {
+  //   //main();
+  //   this.props.fetchChannels();
+  // }
 
   state = {
     name: "" //channel name
   };
 
   render() {
-    const channelRows = this.props.channels.map(channel => (
+    const channelRows = this.props.filteredChannels.map(channel => (
+
       <ChannelRow key={channel.name} channel={channel} />
+
     ));
 
     return (
-      <View>
-        <Header>
-          <Title>Channels List</Title>
+      <Content style={{ backgroundColor: "black" }}>
 
-          <Button transparent>
-            <Icon name="pluscircleo" type="AntDesign" />
-          </Button>
-        </Header>
+        <Searchbar />
 
-        {channelRows}
-      </View>
+        <List>{channelRows}</List>
+      </Content>
     );
   }
 }
 const mapStateToProps = state => {
   return {
     user: state.user,
-    channels: state.rootChannels.channels
-    //filteredChannels: state.rootChannels.filteredChannels
+    channels: state.rootChannels.channels,
+    filteredChannels: state.rootChannels.filteredChannels
   };
 };
 
@@ -53,7 +68,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(actionCreators.fetchChannelDetail(channelID)),
     fetchChannels: () => dispatch(actionCreators.fetchChannels()),
     postChannel: (newChannelName, resetForm) =>
-      dispatch(actionCreators.postChannel(newChannelName, resetForm))
+      dispatch(actionCreators.postChannel(newChannelName, resetForm)),
+
+    filterChannels: query => dispatch(actionCreators.filterChannels(query))
+
   };
 };
 export default connect(

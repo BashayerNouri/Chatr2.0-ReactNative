@@ -2,25 +2,29 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 import * as actionTypes from "./actionTypes";
-
+import { fetchChannels } from "./channels"
 import { setErrors, resetErrors } from "./errors";
 import { AsyncStorage } from "react-native";
 
+
 const setCurrentUser = token => {
   let user;
-  if (token) {
-    AsyncStorage.setItem("token", token);
-    axios.defaults.headers.common.Authorization = `jwt ${token}`;
-    user = jwt_decode(token);
-  } else {
-    AsyncStorage.removeItem("token");
-    delete axios.defaults.headers.common.Authorization;
-    user = null;
-  }
+  return dispatch => {
+    if (token) {
+      AsyncStorage.setItem("token", token);
+      axios.defaults.headers.common.Authorization = `jwt ${token}`;
+      user = jwt_decode(token);
+      dispatch(fetchChannels());
+    } else {
+      AsyncStorage.removeItem("token");
+      delete axios.defaults.headers.common.Authorization;
+      user = null;
+    }
 
-  return {
-    type: actionTypes.SET_CURRENT_USER,
-    payload: user
+    dispatch({
+      type: actionTypes.SET_CURRENT_USER,
+      payload: user
+    });
   };
 };
 
@@ -35,7 +39,7 @@ export const login = (userData, navigation) => {
       dispatch(setCurrentUser(user.token));
       dispatch(resetErrors());
 
-      navigation.replace("TestScreen");
+      navigation.replace("ChannelScreen");
     } catch (error) {
       console.log(error);
       dispatch({
@@ -57,7 +61,7 @@ export const signup = (userData, navigation) => {
       dispatch(setCurrentUser(user.token));
       dispatch(resetErrors());
 
-      navigation.replace("TestScreen");
+      navigation.replace("ChannelScreen");
     } catch (error) {
       //another possible solution for catching errors
       console.error(error.response.data);

@@ -3,12 +3,12 @@ import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { fetchChannelDetail, sendMessage, setLoading } from "../redux/actions";
 import Messages from "./Messages";
-import SearchChannelBar from "./SearchChannelBar";
+// import SearchChannelBar from "./SearchChannelBar";
 import Loading from "./Loading";
 
 import { withNavigation } from "react-navigation";
 
-import { Container, Header, Thumbnail, Text, Icon } from "native-base";
+import { Container, Header, Thumbnail, Text, Icon, Content, Form, Item, Input, Button } from "native-base";
 import { View } from "react-native";
 
 class ChannelDetail extends Component {
@@ -43,33 +43,35 @@ class ChannelDetail extends Component {
   };
 
   componentDidMount() {
+    const channelID = this.props.navigation.getParam("channelID");
+
     // const timeStamp = this.props.match.params.channelID.latest;
     this.props.changeLoading();
+    this.props.fetchChannelDetail(channelID);
 
-    this.interval = setInterval(
-      () => {
-        if (this.props.match.params.channelID !== undefined) {
-          this.props.fetchChannelDetail(this.props.match.params.channelID);
-        }
-      },
-      1000
-      // timeStamp
-    );
+    // this.interval = setInterval(
+    //   () => {
+    //     if (channelID !== undefined) {
+    //       this.props.fetchChannelDetail(channelID);
+    //     }
+    //   },
+    //   5000      // timeStamp
+    // );
   }
 
   componentDidUpdate(prevProps) {
     const channelID = this.props.navigation.getParam("channelID");
-
-
     if (channelID !== undefined) {
       if (channelID !== prevProps.channelID) {
         this.props.changeLoading();
         this.props.fetchChannelDetail(channelID);
       } else {
-        clearInterval(this.interval);
-        this.interval = setInterval(() => {
-          this.props.fetchChannelDetail(channelID);
-        }, 1000);
+        this.props.fetchChannelDetail(channelID);
+
+        // clearInterval(this.interval);
+        // this.interval = setInterval(() => {
+        //   this.props.fetchChannelDetail(channelID);
+        // }, 1000);
       }
     }
 

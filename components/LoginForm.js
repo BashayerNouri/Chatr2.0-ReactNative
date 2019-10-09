@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withNavigation } from "react-navigation";
-
+import bgimg from "./bkg.png"
 // NativeBase Components
 import {
   Text,
@@ -17,7 +17,7 @@ import {
   Label
 } from "native-base";
 
-import { View } from "react-native";
+import { View, ImageBackground } from "react-native";
 
 import * as actionCreators from "../redux/actions";
 import { connect } from "react-redux";
@@ -57,6 +57,7 @@ class LoginForm extends Component {
 
     return (
       <Content>
+        {/* <ImageBackground source={bgimg}> */}
         <Header transparent />
         <List>
           <ListItem style={{ borderBottomWidth: 0 }}>
@@ -107,7 +108,8 @@ class LoginForm extends Component {
           </ListItem>
           <Button
             full
-            success
+            style={{ backgroundColor: "#003cc7" }}
+
             onPress={() => this.props.login(this.state, this.props.navigation)}
           >
             <Text>Login</Text>
@@ -122,6 +124,10 @@ class LoginForm extends Component {
         <Body>
           <Label style={{ color: "red", opacity: 0.6 }} />
         </Body>
+
+
+
+        {/* </ImageBackground> */}
       </Content>
     );
   }
