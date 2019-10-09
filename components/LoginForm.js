@@ -50,7 +50,7 @@ class LoginForm extends Component {
     // const type = this.props.match.url.substring(1);
 
     if (this.props.user) {
-      return this.props.navigation.navigate("TestScreen");
+      return this.props.navigation.navigate("ChannelScreen");
     }
 
     const errors = this.props.errors;
