@@ -11,11 +11,12 @@ class Loading extends Component {
         {/* <img src={myloading}></img> */}
         {/* <FontAwesomeIcon icon={faSpinner} spin size="4x" /> */}
         <View>
+          <Image
+            style={{ width: 50, height: 50 }}
+            source={myloading}
+          />
 
-          <Thumbnail>
-
-          </Thumbnail>
-        </View>                        src={myloading}>
+        </View>
       </Container>
     );
   }
