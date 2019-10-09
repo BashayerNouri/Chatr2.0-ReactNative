@@ -1,15 +1,22 @@
 import React, { Component } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { Container, Header, Thumbnail, Text, Icon } from "native-base";
+import { Image, View } from "react-native";
+
+import myloading from "./lg.ajax-spinner-gif.gif"
 
 class Loading extends Component {
   render() {
     return (
-      <div className="container m-4 p-5">
-        <div className="spinner mx-auto text-center">
-          <FontAwesomeIcon icon={faSpinner} spin size="4x" />
-        </div>
-      </div>
+      <Container>
+
+        <View>
+          <Image
+            style={{ width: 50, height: 50 }}
+            source={myloading}
+          />
+
+        </View>
+      </Container>
     );
   }
 }
