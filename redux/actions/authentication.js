@@ -5,22 +5,26 @@ import * as actionTypes from "./actionTypes";
 
 import { setErrors, resetErrors } from "./errors";
 import { AsyncStorage } from "react-native";
+import { fetchChannels } from "./channels";
 
 const setCurrentUser = token => {
   let user;
-  if (token) {
-    AsyncStorage.setItem("token", token);
-    axios.defaults.headers.common.Authorization = `jwt ${token}`;
-    user = jwt_decode(token);
-  } else {
-    AsyncStorage.removeItem("token");
-    delete axios.defaults.headers.common.Authorization;
-    user = null;
-  }
+  return dispatch => {
+    if (token) {
+      AsyncStorage.setItem("token", token);
+      axios.defaults.headers.common.Authorization = `jwt ${token}`;
+      user = jwt_decode(token);
+      dispatch(fetchChannels());
+    } else {
+      AsyncStorage.removeItem("token");
+      delete axios.defaults.headers.common.Authorization;
+      user = null;
+    }
 
-  return {
-    type: actionTypes.SET_CURRENT_USER,
-    payload: user
+    dispatch({
+      type: actionTypes.SET_CURRENT_USER,
+      payload: user
+    });
   };
 };
 

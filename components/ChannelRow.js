@@ -1,6 +1,7 @@
-import { React, Component } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actionCreators from "../redux/actions";
+import { withNavigation } from "react-navigation";
 
 //NativeBase Components
 import {
@@ -17,7 +18,7 @@ import { View } from "react-native";
 
 class ChannelRow extends Component {
   render() {
-    const channel = this.props.channel;
+    const { channel } = this.props;
     return (
       <Container>
         <ListItem button>
@@ -27,7 +28,7 @@ class ChannelRow extends Component {
                 <Thumbnail
                   source={{ uri: channel.image_url }} //style={styles.thumbnail}
                 /> */}
-          <Text style={styles.text}>{channel.name}</Text>
+          <Text>{channel.name}</Text>
           {/* </Left>
             </CardItem>
           </Card> */}
@@ -37,11 +38,10 @@ class ChannelRow extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchChannelDetail: channelID =>
-      dispatch(actionCreators.fetchChannelDetail(channelID))
-  };
-};
-
-export default connect(mapDispatchToProps)(ChannelRow);
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     fetchChannelDetail: channelID =>
+//       dispatch(actionCreators.fetchChannelDetail(channelID))
+//   };
+// };
+export default ChannelRow;

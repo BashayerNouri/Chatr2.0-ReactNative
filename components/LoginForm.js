@@ -46,6 +46,11 @@ class LoginForm extends Component {
   //   this.props.login(this.state, this.props.history);
   // };
 
+  // componentDidMount() {
+  //   //main();
+  //   this.props.fetchChannels();
+  // }
+
   render() {
     // const type = this.props.match.url.substring(1);
 
