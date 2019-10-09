@@ -1,5 +1,24 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { withNavigation } from "react-navigation";
+
+// NativeBase Components
+import {
+  Text,
+  Button,
+  Form,
+  Input,
+  Item,
+  Content,
+  Header,
+  Container,
+  List,
+  ListItem,
+  Body,
+  Label
+} from "native-base";
+
+import { View } from "react-native";
+
 import * as actionCreators from "../redux/actions";
 import { connect } from "react-redux";
 
@@ -13,70 +32,97 @@ class LoginForm extends Component {
     if (this.props.errors.length) this.props.resetErrors();
   }
 
-  changeHandler = e => {
-    this.setState({ [e.target.name]: e.target.value });
+  // changeHandler = e => {
+  //   this.setState({ [e.target.name]: e.target.value });
+  // };
+
+  handleChange = keyValue => {
+    this.setState(keyValue);
   };
 
-  submitHandler = e => {
-    e.preventDefault();
+  // submitHandler = e => {
+  //   e.preventDefault();
 
-    this.props.login(this.state, this.props.history);
-  };
+  //   this.props.login(this.state, this.props.history);
+  // };
 
   render() {
-    const type = this.props.match.url.substring(1);
+    // const type = this.props.match.url.substring(1);
 
-    if (this.props.user) return <Redirect to="/" />;
+    if (this.props.user) {
+      return this.props.navigation.navigate("TestScreen");
+    }
 
     const errors = this.props.errors;
 
     return (
-      <div id="loginCard" className="card col-6 mx-auto p-0 mt-5">
-        <div className="card-body">
-          <h5 className="card-title mb-4">Login</h5>
-          <form onSubmit={this.submitHandler}>
-            {!!errors.length && (
-              <div className="alert alert-danger" role="alert">
-                {errors.map(error => (
-                  <p key={error}>{error}</p>
-                ))}
-              </div>
-            )}
+      <Content>
+        <Header transparent />
+        <List>
+          <ListItem style={{ borderBottomWidth: 0 }}>
+            <Body>
+              <Text>Login Form</Text>
+              <Form>
+                {!!errors.length && (
+                  <View className="alert alert-danger" role="alert">
+                    {errors.map(error => (
+                      <Text key={error}>{error}</Text>
+                    ))}
+                  </View>
+                )}
+                <Body>
+                  <Label style={{ color: "white" }}>Username</Label>
+                </Body>
+                <Item
+                  rounded
+                  style={{
+                    backgroundColor: "white",
+                    marginTop: 10,
+                    marginBottom: 10
+                  }}
+                >
+                  <Input
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    onChangeText={username => this.setState({ username })}
+                    value={this.state.username}
+                  />
+                </Item>
+                <Body>
+                  <Label style={{ color: "white" }}>Password</Label>
+                </Body>
+                <Item
+                  rounded
+                  style={{ backgroundColor: "white", marginTop: 10 }}
+                >
+                  <Input
+                    autoCorrect={false}
+                    secureTextEntry
+                    autoCapitalize="none"
+                    onChangeText={password => this.setState({ password })}
+                  />
+                </Item>
+              </Form>
+            </Body>
+          </ListItem>
+          <Button
+            full
+            success
+            onPress={() => this.props.login(this.state, this.props.navigation)}
+          >
+            <Text>Login</Text>
+          </Button>
 
-            <div className="form-group">
-              <input
-                className="form-control"
-                type="text"
-                placeholder="Username"
-                name="username"
-                id="input"
-                onChange={this.changeHandler}
-              />
-            </div>
-            <div className="form-group">
-              <input
-                className="form-control"
-                type="password"
-                placeholder="Password"
-                name="password"
-                id="input"
-                onChange={this.changeHandler}
-              />
-            </div>
-            <input
-              id="loginbtn"
-              className="btn btn-primary btn-block"
-              type="submit"
-              value={type.replace(/^\w/, c => c.toUpperCase())}
-            />
-          </form>
-        </div>
-        <div className="card-footer">
-          <Link to="/signup" className="btn btn-small btn-link">
-            Create an account
-          </Link>
-        </div>
-      </div>
+          <Text
+            onPress={() => this.props.signup(this.state, this.props.navigation)}
+          >
+            Dont't have an account? Signup
+          </Text>
+        </List>
+        <Body>
+          <Label style={{ color: "red", opacity: 0.6 }} />
+        </Body>
+      </Content>
     );
   }
 }
@@ -89,13 +135,17 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    login: (userData, history) =>
-      dispatch(actionCreators.login(userData, history)),
+    signup: (userData, navigation) =>
+      dispatch(actionCreators.signup(userData, navigation)),
+    login: (userData, navigation) =>
+      dispatch(actionCreators.login(userData, navigation)),
     resetErrors: () => dispatch(actionCreators.resetErrors())
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginForm);
+export default withNavigation(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(LoginForm)
+);
