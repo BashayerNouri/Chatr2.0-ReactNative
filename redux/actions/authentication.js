@@ -2,10 +2,11 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 import * as actionTypes from "./actionTypes";
-
+import { fetchChannels } from "./channels"
 import { setErrors, resetErrors } from "./errors";
 import { AsyncStorage } from "react-native";
 import { fetchChannels } from "./channels";
+
 
 const setCurrentUser = token => {
   let user;
@@ -39,7 +40,7 @@ export const login = (userData, navigation) => {
       dispatch(setCurrentUser(user.token));
       dispatch(resetErrors());
 
-      navigation.replace("TestScreen");
+      navigation.replace("ChannelScreen");
     } catch (error) {
       console.log(error);
       dispatch({
@@ -61,7 +62,7 @@ export const signup = (userData, navigation) => {
       dispatch(setCurrentUser(user.token));
       dispatch(resetErrors());
 
-      navigation.replace("TestScreen");
+      navigation.replace("ChannelScreen");
     } catch (error) {
       //another possible solution for catching errors
       console.error(error.response.data);

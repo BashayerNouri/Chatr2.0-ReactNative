@@ -5,19 +5,26 @@ import RegistrationForm from "../components/RegistrationForm"; //Register
 import Test from "../components/Test.js"; //Register
 import ChannelList from "../components/ChannelList";
 
+import ChannelList from "../components/ChannelList";
+import ChannelDetail from "../components/ChannelDetail";
+import ChannelForm from "../components/ChannelForm";
+
 const MyStackNav = createStackNavigator(
   {
     LoginScreen: LoginForm,
     RegistrationScreen: RegistrationForm,
+    TestScreen: Test,
     ChannelScreen: ChannelList,
-    TestScreen: Test
+    ChatScreen: ChannelDetail,
+    ChannelForm: ChannelForm
+
   },
   {
     initialRouteName: "LoginScreen",
 
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: "rgb(20,90,100)"
+        backgroundColor: "#00c9ff"
       },
       headerTitleStyle: {
         fontWeight: "bold"

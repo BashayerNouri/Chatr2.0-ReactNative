@@ -48,6 +48,7 @@ export const postChannel = (newChannelName, resetForm, navigation) => {
       dispatch(filterChannels(""));
 
       resetForm();
+      navigation.replace("ChannelScreen");
       // history.replace(`/channels/${channel.id}`); // NOTE!!! this must redirect to the new channel url not home
     } catch (err) {
       dispatch({

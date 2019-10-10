@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withNavigation } from "react-navigation";
-
+import bgimg from "./bkg.png"
 // NativeBase Components
 import {
   Text,
@@ -17,7 +17,7 @@ import {
   Label
 } from "native-base";
 
-import { View } from "react-native";
+import { View, ImageBackground } from "react-native";
 
 import * as actionCreators from "../redux/actions";
 import { connect } from "react-redux";
@@ -61,7 +61,9 @@ class LoginForm extends Component {
     const errors = this.props.errors;
 
     return (
-      <Content>
+      <Content style={{ backgroundColor: "black" }}
+      >
+        {/* <ImageBackground source={bgimg}> */}
         <Header transparent />
         <List>
           <ListItem style={{ borderBottomWidth: 0 }}>
@@ -89,6 +91,7 @@ class LoginForm extends Component {
                   <Input
                     autoCorrect={false}
                     autoCapitalize="none"
+                    placeholder="username"
                     onChangeText={username => this.setState({ username })}
                     value={this.state.username}
                   />
@@ -103,6 +106,8 @@ class LoginForm extends Component {
                   <Input
                     autoCorrect={false}
                     secureTextEntry
+                    placeholder="password"
+
                     autoCapitalize="none"
                     onChangeText={password => this.setState({ password })}
                   />
@@ -112,14 +117,16 @@ class LoginForm extends Component {
           </ListItem>
           <Button
             full
-            success
+            style={{ backgroundColor: "#003cc7" }}
+
             onPress={() => this.props.login(this.state, this.props.navigation)}
           >
             <Text>Login</Text>
           </Button>
 
           <Text
-            onPress={() => this.props.signup(this.state, this.props.navigation)}
+            style={{ color: "white" }}
+
           >
             Dont't have an account? Signup
           </Text>
@@ -127,6 +134,10 @@ class LoginForm extends Component {
         <Body>
           <Label style={{ color: "red", opacity: 0.6 }} />
         </Body>
+
+
+
+        {/* </ImageBackground> */}
       </Content>
     );
   }

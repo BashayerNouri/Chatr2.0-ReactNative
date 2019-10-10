@@ -12,36 +12,52 @@ import {
   Button,
   ListItem,
   Icon,
-  Container
+  Thumbnail,
+  CardItem,
+  Card,
+  Container,
+  Item
 } from "native-base";
 import { View } from "react-native";
+import { withNavigation } from "react-navigation";
 
 class ChannelRow extends Component {
   render() {
     const { channel } = this.props;
     return (
-      <Container>
-        <ListItem button>
-          {/* <Card style={styles.transparent}>
-            <CardItem style={styles.transparent}>
-              <Left>
-                <Thumbnail
-                  source={{ uri: channel.image_url }} //style={styles.thumbnail}
-                /> */}
-          <Text>{channel.name}</Text>
-          {/* </Left>
-            </CardItem>
-          </Card> */}
-        </ListItem>
-      </Container>
+      <ListItem button
+        style={{ backgroundColor: "black" }}
+        onPress={() =>
+          this.props.navigation.navigate("ChatScreen", {
+            channelID: channel.id
+          })
+        }
+      >
+
+
+
+        < Left >
+          <Thumbnail
+            source={{ uri: channel.image_url }} //style={styles.thumbnail}
+          />
+          <Text style={{
+            color: "#8ae6ff", fontSize: 18,
+            fontWeight: "bold",
+          }}>   {channel.name}</Text>
+        </Left>
+
+      </ListItem>
+
     );
   }
 }
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     fetchChannelDetail: channelID =>
-//       dispatch(actionCreators.fetchChannelDetail(channelID))
-//   };
-// };
-export default ChannelRow;
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchChannelDetail: channelID =>
+      dispatch(actionCreators.fetchChannelDetail(channelID))
+  };
+};
+
+export default withNavigation(connect(mapDispatchToProps)(ChannelRow));
+

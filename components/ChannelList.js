@@ -3,6 +3,7 @@ import * as actionCreators from "../redux/actions";
 import { connect } from "react-redux";
 
 //NativeBase Components
+
 import {
   Text,
   Left,
@@ -13,12 +14,18 @@ import {
   Icon,
   Header,
   Title,
-  Container
+  Container,
+  List,
+  Content,
+  Item,
+  Input
 } from "native-base";
 import { View } from "react-native";
 
+
 //Components
 import ChannelRow from "./ChannelRow";
+import Searchbar from "./Navigation/SearchBar";
 
 class ChannelList extends Component {
   // componentDidMount() {
@@ -31,35 +38,37 @@ class ChannelList extends Component {
   };
 
   render() {
-    const channelRows = this.props.channels.map(channel => {
-      return <ChannelRow channel={channel} />;
-    });
+    const channelRows = this.props.filteredChannels.map(channel => (
 
-    // const channelRows = this.props.channels.map(channel => {
-    //   console.log(channel);
+      <ChannelRow key={channel.name} channel={channel} />
 
-    //   return <Text onPress={() => alert("hi")}>{channel.name}</Text>;
-    // });
+    ));
 
     return (
-      <Container>
-        <Header>
-          <Title>Channels List</Title>
+      <Content style={{ backgroundColor: "black" }}>
 
-          <Button transparent>
-            <Icon name="pluscircleo" type="AntDesign" />
-          </Button>
-        </Header>
-        <View>{channelRows}</View>
-      </Container>
+        <Button
+          full
+          style={{ backgroundColor: "#003cc7" }}
+
+          onPress={() => this.props.navigation.navigate("ChannelForm")}
+        >
+          <Text>Create A Channel</Text>
+        </Button>
+        <Searchbar />
+
+
+        <List>{channelRows}</List>
+      </Content>
+  
     );
   }
 }
 const mapStateToProps = state => {
   return {
     user: state.user,
-    channels: state.rootChannels.channels
-    //filteredChannels: state.rootChannels.filteredChannels
+    channels: state.rootChannels.channels,
+    filteredChannels: state.rootChannels.filteredChannels
   };
 };
 
@@ -69,7 +78,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(actionCreators.fetchChannelDetail(channelID)),
     fetchChannels: () => dispatch(actionCreators.fetchChannels()),
     postChannel: (newChannelName, resetForm) =>
-      dispatch(actionCreators.postChannel(newChannelName, resetForm))
+      dispatch(actionCreators.postChannel(newChannelName, resetForm)),
+
+    filterChannels: query => dispatch(actionCreators.filterChannels(query))
+
   };
 };
 export default connect(
