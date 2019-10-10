@@ -2,6 +2,22 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import * as actionCreators from "../redux/actions";
 import { connect } from "react-redux";
+import { withNavigation } from "react-navigation";
+// NativeBase Components
+import {
+  Text,
+  Button,
+  Form,
+  Input,
+  Item,
+  Content,
+  Header,
+  Container,
+  List,
+  ListItem,
+  Body,
+  Label
+} from "native-base";
 
 class ChannelForm extends Component {
   state = {
@@ -12,10 +28,10 @@ class ChannelForm extends Component {
     if (this.props.errors.length) this.props.resetErrors();
   }
 
-  // handle changes in the form
-  textChangeHandler = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
+  // // handle changes in the form
+  // textChangeHandler = keyValue => {
+  //   this.setState(keyValue);
+  // };
 
   //used to reset the form
   resetForm = () =>
@@ -23,9 +39,14 @@ class ChannelForm extends Component {
       name: ""
     });
 
-  submitChannel = event => {
-    event.preventDefault();
-    this.props.postChannel(this.state, this.resetForm, this.props.history);
+  // submitChannel = event => {
+  //   event.preventDefault();
+  //   this.props.postChannel(this.state, this.resetForm, this.props.history);
+
+  // };
+
+  handleChange = keyValue => {
+    this.setState(keyValue);
   };
 
   render() {
@@ -34,51 +55,59 @@ class ChannelForm extends Component {
     const errors = this.props.errors;
 
     return (
-      <div className="card col-6 mx-auto p-0 mt-5 create">
-        <div className="card-body">
-          <h2 className="card-title mt-5 text-center">
-            {" "}
-            Create a new Channel{" "}
-          </h2>
-          <div className="mt-5 p-5">
-            <form onSubmit={this.submitChannel}>
-              {!!errors.length && (
-                <div className="alert alert-danger" role="alert">
-                  {errors.map(error => (
-                    <p key={error}>{error}</p>
-                  ))}
-                </div>
-              )}
-              <div className="input-group mb-3 border border-primary border-5 rounded-pill">
-                <div className="input-group-prepend ">
-                  <span className="input-group-text bg-dark text-white rounded-pill">
-                    {" "}
-                    Channel Name
-                  </span>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Type channel name here.."
-                  className="form-control border-0"
-                  style={{ backgroundColor: "transparent" }}
-                  name="name"
-                  value={this.state.name}
-                  onChange={this.textChangeHandler}
-                />
-              </div>
-              <div className="text-center">
-                <button
-                  id="createbtn"
-                  type="submit"
-                  className=" btn btn-primary rounded-pill "
+      <Content>
+        <Header transparent />
+        <List>
+          <ListItem style={{ borderBottomWidth: 0 }}>
+            <Body>
+              <Text>Create a Channel</Text>
+              <Form>
+                {!!errors.length && (
+                  <View className="alert alert-danger" role="alert">
+                    {errors.map(error => (
+                      <Text key={error}>{error}</Text>
+                    ))}
+                  </View>
+                )}
+                <Body>
+                  <Label style={{ color: "white" }}>Channel Name</Label>
+                </Body>
+                <Item
+                  rounded
+                  style={{
+                    backgroundColor: "white",
+                    marginTop: 10,
+                    marginBottom: 10
+                  }}
                 >
-                  Create
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+                  <Input
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    onChangeText={name => this.setState({ name })}
+                    value={this.state.name}
+                  />
+                </Item>
+              </Form>
+            </Body>
+          </ListItem>
+          <Button
+            full
+            success
+            onPress={() =>
+              this.props.postChannel(
+                this.state,
+                this.resetForm,
+                this.props.navigation
+              )
+            }
+          >
+            <Text>Create</Text>
+          </Button>
+        </List>
+        <Body>
+          <Label style={{ color: "red", opacity: 0.6 }} />
+        </Body>
+      </Content>
     );
   }
 }
@@ -98,7 +127,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChannelForm);
+export default withNavigation(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(ChannelForm)
+);

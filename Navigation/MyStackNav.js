@@ -6,6 +6,7 @@ import Test from "../components/Test.js"; //Register
 
 import ChannelList from "../components/ChannelList";
 import ChannelDetail from "../components/ChannelDetail";
+import ChannelForm from "../components/ChannelForm";
 
 const MyStackNav = createStackNavigator(
   {
@@ -13,7 +14,8 @@ const MyStackNav = createStackNavigator(
     RegistrationScreen: RegistrationForm,
     TestScreen: Test,
     ChannelScreen: ChannelList,
-    ChatScreen: ChannelDetail
+    ChatScreen: ChannelDetail,
+    ChannelForm: ChannelForm
   },
   {
     initialRouteName: "LoginScreen",

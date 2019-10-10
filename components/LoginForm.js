@@ -56,7 +56,8 @@ class LoginForm extends Component {
     const errors = this.props.errors;
 
     return (
-      <Content>
+      <Content style={{ backgroundColor: "black" }}
+      >
         {/* <ImageBackground source={bgimg}> */}
         <Header transparent />
         <List>
@@ -85,6 +86,7 @@ class LoginForm extends Component {
                   <Input
                     autoCorrect={false}
                     autoCapitalize="none"
+                    placeholder="username"
                     onChangeText={username => this.setState({ username })}
                     value={this.state.username}
                   />
@@ -99,6 +101,8 @@ class LoginForm extends Component {
                   <Input
                     autoCorrect={false}
                     secureTextEntry
+                    placeholder="password"
+
                     autoCapitalize="none"
                     onChangeText={password => this.setState({ password })}
                   />
@@ -116,7 +120,8 @@ class LoginForm extends Component {
           </Button>
 
           <Text
-            onPress={() => this.props.signup(this.state, this.props.navigation)}
+            style={{ color: "white" }}
+
           >
             Dont't have an account? Signup
           </Text>

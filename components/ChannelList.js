@@ -47,7 +47,16 @@ class ChannelList extends Component {
     return (
       <Content style={{ backgroundColor: "black" }}>
 
+        <Button
+          full
+          style={{ backgroundColor: "#003cc7" }}
+
+          onPress={() => this.props.navigation.navigate("ChannelForm")}
+        >
+          <Text>Create A Channel</Text>
+        </Button>
         <Searchbar />
+
 
         <List>{channelRows}</List>
       </Content>

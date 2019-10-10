@@ -8,14 +8,22 @@ import Loading from "./Loading";
 
 import { withNavigation } from "react-navigation";
 
-import { Container, Header, Thumbnail, Text, Icon, Content, Form, Item, Input, Button } from "native-base";
+import {
+  Container,
+  Header,
+  Thumbnail,
+  Text,
+  Icon,
+  Content,
+  Form,
+  Item,
+  Input,
+  Button,
+  List
+} from "native-base";
 import { View } from "react-native";
 
 class ChannelDetail extends Component {
-
-
-
-
   state = {
     filteredMessages: [],
     searchIsUsed: false,
@@ -45,58 +53,76 @@ class ChannelDetail extends Component {
   componentDidMount() {
     const channelID = this.props.navigation.getParam("channelID");
 
-    // const timeStamp = this.props.match.params.channelID.latest;
-    this.props.changeLoading();
-    this.props.fetchChannelDetail(channelID);
+    // // const timeStamp = this.props.match.params.channelID.latest;
+    // this.props.changeLoading();
+    // this.props.fetchChannelDetail(channelID);
 
-    // this.interval = setInterval(
-    //   () => {
-    //     if (channelID !== undefined) {
-    //       this.props.fetchChannelDetail(channelID);
-    //     }
-    //   },
-    //   5000      // timeStamp
-    // );
+    // // this.interval = setInterval(
+    // //   () => {
+    // //     if (channelID !== undefined) {
+    // //       this.props.fetchChannelDetail(channelID);
+    // //     }
+    // //   },
+    // //   5000      // timeStamp
+    // // );
+    this.props.changeLoading();
+
+    this.interval = setInterval(
+      () => {
+        if (channelID !== undefined) {
+          this.props.fetchChannelDetail(channelID);
+        }
+      },
+      1000
+      // timeStamp
+    );
   }
 
   componentDidUpdate(prevProps) {
     const channelID = this.props.navigation.getParam("channelID");
+
+    // if (channelID !== undefined) {
+    //   if (channelID !== prevProps.channelID) {
+    //     this.props.changeLoading();
+    //     this.props.fetchChannelDetail(channelID);
+    //   } else {
+    //     this.props.fetchChannelDetail(channelID);
+
+    //     // clearInterval(this.interval);
+    //     // this.interval = setInterval(() => {
+    //     //   this.props.fetchChannelDetail(channelID);
+    //     // }, 1000); f
+    //   }
     if (channelID !== undefined) {
-      if (channelID !== prevProps.channelID) {
+      if (channelID == prevProps.channelID) {
         this.props.changeLoading();
         this.props.fetchChannelDetail(channelID);
       } else {
-        this.props.fetchChannelDetail(channelID);
-
-        // clearInterval(this.interval);
-        // this.interval = setInterval(() => {
-        //   this.props.fetchChannelDetail(channelID);
-        // }, 1000);
+        clearInterval(this.interval);
+        this.interval = setInterval(() => {
+          this.props.fetchChannelDetail(channelID);
+        }, 1000);
       }
     }
-
-
-    // if (this.props.match.params.channelID !== undefined) {
-    //   if (
-    //     this.props.match.params.channelID !== prevProps.match.params.channelID
-    //   ) {
-    //     this.props.changeLoading();
-    //     this.props.fetchChannelDetail(this.props.match.params.channelID);
-    //   } else {
-    //     clearInterval(this.interval);
-    //     this.interval = setInterval(() => {
-    //       this.props.fetchChannelDetail(this.props.match.params.channelID);
-    //     }, 1000);
-    //   }
-    // }
-
-
   }
+
+  // if (this.props.match.params.channelID !== undefined) {
+  //   if (
+  //     this.props.match.params.channelID !== prevProps.match.params.channelID
+  //   ) {
+  //     this.props.changeLoading();
+  //     this.props.fetchChannelDetail(this.props.match.params.channelID);
+  //   } else {
+  //     clearInterval(this.interval);
+  //     this.interval = setInterval(() => {
+  //       this.props.fetchChannelDetail(this.props.match.params.channelID);
+  //     }, 1000);
+  //   }
+  // }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
-
 
   //added this for the native form format
   handleChange = keyValue => {
@@ -117,9 +143,7 @@ class ChannelDetail extends Component {
     this.setState({
       message: ""
     });
-
   };
-
 
   myView = () => {
     const channel = this.props.channel;
@@ -127,10 +151,7 @@ class ChannelDetail extends Component {
     if (!!channel) {
       if (this.state.searchIsUsed) {
         const resultedMessages = this.state.filteredMessages.map(message => (
-          <Messages
-            key={message.id}
-            messages={message}
-          />
+          <Messages key={message.id} messages={message} />
         ));
         return { resultedMessages };
         {
@@ -138,16 +159,9 @@ class ChannelDetail extends Component {
       } //search is not used
       else {
         const messages = channel.map(message => (
-          <Messages
-            key={message.id}
-            messages={message}
-          />
+          <Messages key={message.id} messages={message} />
         ));
-        return (
-          <View>
-            {messages}
-          </View>
-        );
+        return <View>{messages}</View>;
       }
     }
   };
@@ -155,40 +169,35 @@ class ChannelDetail extends Component {
   render() {
     if (this.props.loading) return <Loading />;
 
-
-
     const { message } = this.state.message;
 
     return (
       <>
         {/* <SearchChannelBar onChangeText={this.filterMessages} /> */}
-        <View>
-          {this.myView()}
-          <Container>
-            <Header />
-            <Content>
-              <Form>
-                <Item>
-                  <Input
-                    name="message"
-                    value={message}
-                    placeholder="Write your message..."
-                    onChangeText={message => this.handleChange({ message: message })} />
+        <Content>
+          <List>{this.myView()}</List>
 
-                </Item>
+          <Header />
+          <Content>
+            <Form>
+              <Item>
+                <Input
+                  name="message"
+                  value={message}
+                  placeholder="Write your message..."
+                  onChangeText={message =>
+                    this.handleChange({ message: message })
+                  }
+                />
+              </Item>
 
-                <Button onPress={this.handleSubmit}>
-                  <Icon name="send-circle" type="MaterialCommunityIcons" />
-                </Button>
-
-              </Form>
-            </Content>
-          </Container>
-
-
-        </View>
-
-
+              <Button onPress={this.handleSubmit}>
+                <Icon name="send-circle" type="MaterialCommunityIcons" />
+              </Button>
+            </Form>
+            <Container></Container>
+          </Content>
+        </Content>
       </>
     );
   }
@@ -215,4 +224,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(ChannelDetail));
+export default withNavigation(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(ChannelDetail)
+);
