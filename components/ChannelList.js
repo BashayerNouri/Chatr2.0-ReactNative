@@ -3,7 +3,7 @@ import * as actionCreators from "../redux/actions";
 import { connect } from "react-redux";
 
 //NativeBase Components
-//NativeBase Components
+
 import {
   Text,
   Left,
@@ -60,6 +60,7 @@ class ChannelList extends Component {
 
         <List>{channelRows}</List>
       </Content>
+  
     );
   }
 }

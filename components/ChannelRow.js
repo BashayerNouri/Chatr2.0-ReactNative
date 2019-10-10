@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actionCreators from "../redux/actions";
+import { withNavigation } from "react-navigation";
 
 //NativeBase Components
 import {
@@ -22,7 +23,7 @@ import { withNavigation } from "react-navigation";
 
 class ChannelRow extends Component {
   render() {
-    const channel = this.props.channel;
+    const { channel } = this.props;
     return (
       <ListItem button
         style={{ backgroundColor: "black" }}
@@ -46,6 +47,7 @@ class ChannelRow extends Component {
         </Left>
 
       </ListItem>
+
     );
   }
 }
@@ -58,3 +60,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default withNavigation(connect(mapDispatchToProps)(ChannelRow));
+

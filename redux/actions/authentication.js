@@ -5,6 +5,7 @@ import * as actionTypes from "./actionTypes";
 import { fetchChannels } from "./channels"
 import { setErrors, resetErrors } from "./errors";
 import { AsyncStorage } from "react-native";
+import { fetchChannels } from "./channels";
 
 
 const setCurrentUser = token => {

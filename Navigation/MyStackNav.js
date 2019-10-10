@@ -3,6 +3,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import LoginForm from "../components/LoginForm"; //Login
 import RegistrationForm from "../components/RegistrationForm"; //Register
 import Test from "../components/Test.js"; //Register
+import ChannelList from "../components/ChannelList";
 
 import ChannelList from "../components/ChannelList";
 import ChannelDetail from "../components/ChannelDetail";
@@ -16,6 +17,7 @@ const MyStackNav = createStackNavigator(
     ChannelScreen: ChannelList,
     ChatScreen: ChannelDetail,
     ChannelForm: ChannelForm
+
   },
   {
     initialRouteName: "LoginScreen",
