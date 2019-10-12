@@ -5,6 +5,10 @@ import { fetchChannelDetail, sendMessage, setLoading } from "../redux/actions";
 import Messages from "./Messages";
 // import SearchChannelBar from "./SearchChannelBar";
 import Loading from "./Loading";
+import sendSound from "./sendSound.mp3"
+// import Sound from 'react-native-sound';
+// const Sound = require('react-native-sound')
+import { Audio } from 'expo-av';
 
 import { withNavigation } from "react-navigation";
 
@@ -50,21 +54,23 @@ class ChannelDetail extends Component {
     });
   };
 
+
+  async componentWillMount() {
+    this.buttonFX = new Audio.Sound();
+    try {
+
+      await this.buttonFX.loadAsync(
+        require("./sendSound.mp3")
+      );
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
   componentDidMount() {
     const channelID = this.props.navigation.getParam("channelID");
 
-    // // const timeStamp = this.props.match.params.channelID.latest;
-    // this.props.changeLoading();
-    // this.props.fetchChannelDetail(channelID);
 
-    // // this.interval = setInterval(
-    // //   () => {
-    // //     if (channelID !== undefined) {
-    // //       this.props.fetchChannelDetail(channelID);
-    // //     }
-    // //   },
-    // //   5000      // timeStamp
-    // // );
     this.props.changeLoading();
 
     this.interval = setInterval(
@@ -76,6 +82,9 @@ class ChannelDetail extends Component {
       1000
       // timeStamp
     );
+
+
+
   }
 
   componentDidUpdate(prevProps) {
@@ -106,19 +115,7 @@ class ChannelDetail extends Component {
     }
   }
 
-  // if (this.props.match.params.channelID !== undefined) {
-  //   if (
-  //     this.props.match.params.channelID !== prevProps.match.params.channelID
-  //   ) {
-  //     this.props.changeLoading();
-  //     this.props.fetchChannelDetail(this.props.match.params.channelID);
-  //   } else {
-  //     clearInterval(this.interval);
-  //     this.interval = setInterval(() => {
-  //       this.props.fetchChannelDetail(this.props.match.params.channelID);
-  //     }, 1000);
-  //   }
-  // }
+
 
   componentWillUnmount() {
     clearInterval(this.interval);
@@ -139,6 +136,12 @@ class ChannelDetail extends Component {
       this.props.user,
       this.resetForm
     );
+    this.buttonFX.replayAsync();
+
+    // let sound = new Sound(sendSound)
+    // sound.play();
+
+
 
     this.setState({
       message: ""
