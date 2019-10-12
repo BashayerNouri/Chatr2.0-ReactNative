@@ -138,9 +138,6 @@ class ChannelDetail extends Component {
     );
     this.buttonFX.replayAsync();
 
-    // let sound = new Sound(sendSound)
-    // sound.play();
-
 
 
     this.setState({
